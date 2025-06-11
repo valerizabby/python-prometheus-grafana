@@ -14,7 +14,7 @@ services:
     api_1:
         container_name: api1
         build:
-            context: ./api
+            context: .
             dockerfile: Dockerfile
         depends_on:
             - prometheus
@@ -23,8 +23,6 @@ services:
         command: python app.py runserver 0.0.0.0:5000
         networks:
             - backend
-        # volumes:
-        #     - "./api/app.py:/app.py"
 
     grafana:
         container_name: grafana
@@ -34,9 +32,13 @@ services:
         depends_on:
             - api_1
         environment:
+            - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
             - GF_AUTH_BASIC_ENABLED=false
             - GF_AUTH_ANONYMOUS_ENABLED=true
             - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+        volumes:
+            - "./grafana-configuration/provisioning:/etc/grafana/provisioning"
+            - "./grafana-configuration/dashboards:/var/lib/grafana/dashboards"
         networks:
             - backend
 

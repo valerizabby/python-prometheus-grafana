@@ -4,15 +4,17 @@ FROM python:3.8
 WORKDIR /api/
 
 # Adding requirements file to current directory
-COPY requirements.txt .
+COPY api/requirements.txt .
 
 # Install dependencies
 RUN pip install -r requirements.txt
 
 # Copy our source code
-COPY ./src/ .
+COPY ./api/src/ .
+COPY ./grafana-configuration/ .
 
 EXPOSE 5000
 
 # Run the application
 CMD ["python", "./app.py"]
+
